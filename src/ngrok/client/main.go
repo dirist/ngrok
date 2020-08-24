@@ -2,10 +2,10 @@ package client
 
 import (
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/util"
 	"github.com/inconshreveable/mousetrap"
 	"math/rand"
-	"ngrok/log"
-	"ngrok/util"
 	"os"
 	"runtime"
 	"time"

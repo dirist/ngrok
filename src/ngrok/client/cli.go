@@ -3,7 +3,8 @@ package client
 import (
 	"flag"
 	"fmt"
-	"ngrok/version"
+	"github.com/dirist/ngrok/src/ngrok/util"
+	"github.com/dirist/ngrok/src/ngrok/version"
 	"os"
 )
 
@@ -22,7 +23,6 @@ Examples:
 Advanced usage: ngrok [OPTIONS] <command> [command args] [...]
 Commands:
 	ngrok start [tunnel] [...]    Start tunnels by name from config file
-	ngork start-all               Start all tunnels defined in config file
 	ngrok list                    List tunnel names from config file
 	ngrok help                    Print help
 	ngrok version                 Print ngrok version
@@ -30,22 +30,22 @@ Commands:
 Examples:
 	ngrok start www api blog pubsub
 	ngrok -log=stdout -config=ngrok.yml start ssh
-	ngrok start-all
 	ngrok version
 
 `
 
 type Options struct {
-	config    string
-	logto     string
-	loglevel  string
-	authtoken string
-	httpauth  string
-	hostname  string
-	protocol  string
-	subdomain string
-	command   string
-	args      []string
+	config      string
+	logto       string
+	loglevel    string
+	authtoken   string
+	httpauth    string
+	hostname    string
+	protocol    string
+	subdomain   string
+	command     string
+	args        []string
+	tlsCrtPaths []string
 }
 
 func ParseArgs() (opts *Options, err error) {
@@ -70,10 +70,10 @@ func ParseArgs() (opts *Options, err error) {
 		"DEBUG",
 		"The level of messages to log. One of: DEBUG, INFO, WARNING, ERROR")
 
-	authtoken := flag.String(
-		"authtoken",
-		"",
-		"Authentication token for identifying an ngrok.com account")
+	//authtoken := flag.String(
+	//	"authtoken",
+	//	"",
+	//	"Authentication token for identifying an ngrok.com account")
 
 	httpauth := flag.String(
 		"httpauth",
@@ -95,6 +95,12 @@ func ParseArgs() (opts *Options, err error) {
 		"http+https",
 		"The protocol of the traffic over the tunnel {'http', 'https', 'tcp'} (default: 'http+https')")
 
+	tlsCrtPaths := util.NewStringSlice()
+	flag.Var(
+		tlsCrtPaths,
+		"tls-cert-paths",
+		"Paths to a TLS certificate file, examples 'tls1.crt,tls2.crt'")
+
 	flag.Parse()
 
 	opts = &Options{
@@ -104,17 +110,16 @@ func ParseArgs() (opts *Options, err error) {
 		httpauth:  *httpauth,
 		subdomain: *subdomain,
 		protocol:  *protocol,
-		authtoken: *authtoken,
-		hostname:  *hostname,
-		command:   flag.Arg(0),
+		//authtoken: *authtoken,
+		hostname:    *hostname,
+		command:     flag.Arg(0),
+		tlsCrtPaths: *tlsCrtPaths,
 	}
 
 	switch opts.command {
 	case "list":
 		opts.args = flag.Args()[1:]
 	case "start":
-		opts.args = flag.Args()[1:]
-	case "start-all":
 		opts.args = flag.Args()[1:]
 	case "version":
 		fmt.Println(version.MajorMinor())

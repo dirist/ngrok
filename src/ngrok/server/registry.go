@@ -3,9 +3,9 @@ package server
 import (
 	"encoding/gob"
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/cache"
+	"github.com/dirist/ngrok/src/ngrok/log"
 	"net"
-	"ngrok/cache"
-	"ngrok/log"
 	"sync"
 	"time"
 )

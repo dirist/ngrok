@@ -1,11 +1,11 @@
 package term
 
 import (
+	"github.com/dirist/ngrok/src/ngrok/client/mvc"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/proto"
+	"github.com/dirist/ngrok/src/ngrok/util"
 	termbox "github.com/nsf/termbox-go"
-	"ngrok/client/mvc"
-	"ngrok/log"
-	"ngrok/proto"
-	"ngrok/util"
 	"unicode/utf8"
 )
 

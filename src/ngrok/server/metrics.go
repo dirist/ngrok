@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/conn"
+	"github.com/dirist/ngrok/src/ngrok/log"
 	gometrics "github.com/rcrowley/go-metrics"
 	"io/ioutil"
 	"net/http"
-	"ngrok/conn"
-	"ngrok/log"
 	"os"
 	"time"
 )

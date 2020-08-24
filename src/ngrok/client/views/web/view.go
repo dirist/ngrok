@@ -2,13 +2,13 @@
 package web
 
 import (
+	"github.com/dirist/ngrok/src/ngrok/client/assets"
+	"github.com/dirist/ngrok/src/ngrok/client/mvc"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/proto"
+	"github.com/dirist/ngrok/src/ngrok/util"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"ngrok/client/assets"
-	"ngrok/client/mvc"
-	"ngrok/log"
-	"ngrok/proto"
-	"ngrok/util"
 	"path"
 )
 

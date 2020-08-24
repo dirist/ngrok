@@ -6,14 +6,14 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"ngrok/client/assets"
+	"io/ioutil"
 )
 
 func LoadTLSConfig(rootCertPaths []string) (*tls.Config, error) {
 	pool := x509.NewCertPool()
 
 	for _, certPath := range rootCertPaths {
-		rootCrt, err := assets.Asset(certPath)
+		rootCrt, err := ioutil.ReadFile(certPath)
 		if err != nil {
 			return nil, err
 		}

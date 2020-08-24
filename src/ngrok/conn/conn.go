@@ -5,13 +5,13 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/log"
 	vhost "github.com/inconshreveable/go-vhost"
 	"io"
 	"math/rand"
 	"net"
 	"net/http"
 	"net/url"
-	"ngrok/log"
 	"sync"
 )
 

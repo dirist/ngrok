@@ -2,11 +2,11 @@ package server
 
 import (
 	"crypto/tls"
+	"github.com/dirist/ngrok/src/ngrok/conn"
+	log "github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/msg"
+	"github.com/dirist/ngrok/src/ngrok/util"
 	"math/rand"
-	"ngrok/conn"
-	log "ngrok/log"
-	"ngrok/msg"
-	"ngrok/util"
 	"os"
 	"runtime/debug"
 	"time"

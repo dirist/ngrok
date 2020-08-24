@@ -1,4 +1,13 @@
 # Changelog
+## 1.7.2 - 8/24/2020
+- IMPROVEMENT: Simplified makefile
+- IMPROVEMENT: Deleted certificate assets
+- IMPROVEMENT: Added client flag tls-crt-paths
+- IMPROVEMENT: Deleted client flag config.trustHostRootCerts
+- IMPROVEMENT: Deleted client auto update
+- IMPROVEMENT: Added dockerfile
+- IMPROVEMENT: Added go mod
+
 ## 1.7 - 6/6/2014
 - IMPROVEMENT: Print a better help message when run without any arguments
 - IMPROVEMENT: Display useful help message and instructions when double-clicked from explorer on Windows

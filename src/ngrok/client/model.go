@@ -3,17 +3,16 @@ package client
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/client/mvc"
+	"github.com/dirist/ngrok/src/ngrok/conn"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/msg"
+	"github.com/dirist/ngrok/src/ngrok/proto"
+	"github.com/dirist/ngrok/src/ngrok/util"
+	"github.com/dirist/ngrok/src/ngrok/version"
 	metrics "github.com/rcrowley/go-metrics"
 	"io/ioutil"
 	"math"
-	"net"
-	"ngrok/client/mvc"
-	"ngrok/conn"
-	"ngrok/log"
-	"ngrok/msg"
-	"ngrok/proto"
-	"ngrok/util"
-	"ngrok/version"
 	"runtime"
 	"strings"
 	"sync/atomic"
@@ -22,7 +21,6 @@ import (
 
 const (
 	defaultServerAddr   = "ngrokd.ngrok.com:443"
-	defaultInspectAddr  = "127.0.0.1:4040"
 	pingInterval        = 20 * time.Second
 	maxPongLatency      = 15 * time.Second
 	updateCheckInterval = 6 * time.Hour
@@ -102,34 +100,16 @@ func newClientModel(config *Configuration, ctl mvc.Controller) *ClientModel {
 	}
 
 	// configure TLS
-	if config.TrustHostRootCerts {
-		m.Info("Trusting host's root certificates")
-		m.tlsConfig = &tls.Config{}
-	} else {
-		m.Info("Trusting root CAs: %v", rootCrtPaths)
-		var err error
-		if m.tlsConfig, err = LoadTLSConfig(rootCrtPaths); err != nil {
-			panic(err)
-		}
+	m.Info("Trusting root CAs: %v", config.TlsCrtPaths)
+	var err error
+	if m.tlsConfig, err = LoadTLSConfig(config.TlsCrtPaths); err != nil {
+		panic(err)
 	}
 
 	// configure TLS SNI
 	m.tlsConfig.ServerName = serverName(m.serverAddr)
-	m.tlsConfig.InsecureSkipVerify = useInsecureSkipVerify()
 
 	return m
-}
-
-// server name in release builds is the host part of the server address
-func serverName(addr string) string {
-	host, _, err := net.SplitHostPort(addr)
-
-	// should never panic because the config parser calls SplitHostPort first
-	if err != nil {
-		panic(err)
-	}
-
-	return host
 }
 
 // mvc.State interface

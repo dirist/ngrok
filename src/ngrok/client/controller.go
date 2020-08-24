@@ -2,12 +2,12 @@ package client
 
 import (
 	"fmt"
-	"ngrok/client/mvc"
-	"ngrok/client/views/term"
-	"ngrok/client/views/web"
-	"ngrok/log"
-	"ngrok/proto"
-	"ngrok/util"
+	"github.com/dirist/ngrok/src/ngrok/client/mvc"
+	"github.com/dirist/ngrok/src/ngrok/client/views/term"
+	"github.com/dirist/ngrok/src/ngrok/client/views/web"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/proto"
+	"github.com/dirist/ngrok/src/ngrok/util"
 	"sync"
 )
 
@@ -183,7 +183,8 @@ func (ctl *Controller) Run(config *Configuration) {
 		}
 	}
 
-	ctl.Go(func() { autoUpdate(state, config.AuthToken) })
+	// delete equinox update
+	//ctl.Go(func() { util.AutoUpdate(state, config.AuthToken) })
 	ctl.Go(ctl.model.Run)
 
 	updates := ctl.updates.Reg()

@@ -1,11 +1,9 @@
-// +build release autoupdate
-
 package client
 
 import (
-	"ngrok/client/mvc"
-	"ngrok/log"
-	"ngrok/version"
+	"github.com/dirist/ngrok/src/ngrok/client/mvc"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"github.com/dirist/ngrok/src/ngrok/version"
 	"time"
 
 	"gopkg.in/inconshreveable/go-update.v0"
@@ -27,7 +25,7 @@ d/hHfAl567YhlkQMNz8dawxBjQwCHHekgC8gAvTO7kmXkAm6YAbpa9kjwgnorPEP
 ywIDAQAB
 -----END PUBLIC KEY-----`
 
-func autoUpdate(s mvc.State, token string) {
+func AutoUpdate(s mvc.State, token string) {
 	up, err := update.New().VerifySignatureWithPEM([]byte(publicKey))
 	if err != nil {
 		log.Error("Failed to create update with signature: %v", err)

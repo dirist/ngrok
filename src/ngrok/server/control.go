@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
+	"github.com/dirist/ngrok/src/ngrok/conn"
+	"github.com/dirist/ngrok/src/ngrok/msg"
+	"github.com/dirist/ngrok/src/ngrok/util"
+	"github.com/dirist/ngrok/src/ngrok/version"
 	"io"
-	"ngrok/conn"
-	"ngrok/msg"
-	"ngrok/util"
-	"ngrok/version"
 	"runtime/debug"
 	"strings"
 	"time"

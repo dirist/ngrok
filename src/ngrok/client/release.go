@@ -1,11 +1,17 @@
-// +build release
-
 package client
 
-var (
-	rootCrtPaths = []string{"assets/client/tls/ngrokroot.crt"}
-)
+import "net"
 
-func useInsecureSkipVerify() bool {
-	return false
+// assets/client/tls/ngrokroot.crt
+
+// server name in release builds is the host part of the server address
+func serverName(addr string) string {
+	host, _, err := net.SplitHostPort(addr)
+
+	// should never panic because the config parser calls SplitHostPort first
+	if err != nil {
+		panic(err)
+	}
+
+	return host
 }

@@ -2,28 +2,27 @@ package client
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v1"
+	"github.com/dirist/ngrok/src/ngrok/log"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net"
 	"net/url"
-	"ngrok/log"
 	"os"
 	"os/user"
 	"path"
-	"regexp"
 	"strconv"
 	"strings"
 )
 
 type Configuration struct {
-	HttpProxy          string                          `yaml:"http_proxy,omitempty"`
-	ServerAddr         string                          `yaml:"server_addr,omitempty"`
-	InspectAddr        string                          `yaml:"inspect_addr,omitempty"`
-	TrustHostRootCerts bool                            `yaml:"trust_host_root_certs,omitempty"`
-	AuthToken          string                          `yaml:"auth_token,omitempty"`
-	Tunnels            map[string]*TunnelConfiguration `yaml:"tunnels,omitempty"`
-	LogTo              string                          `yaml:"-"`
-	Path               string                          `yaml:"-"`
+	HttpProxy   string                          `yaml:"http_proxy,omitempty"`
+	ServerAddr  string                          `yaml:"server_addr,omitempty"`
+	InspectAddr string                          `yaml:"inspect_addr,omitempty"`
+	AuthToken   string                          `yaml:"auth_token,omitempty"`
+	Tunnels     map[string]*TunnelConfiguration `yaml:"tunnels,omitempty"`
+	LogTo       string                          `yaml:"-"`
+	Path        string                          `yaml:"-"`
+	TlsCrtPaths []string                        `yaml:"-"`
 }
 
 type TunnelConfiguration struct {
@@ -35,6 +34,9 @@ type TunnelConfiguration struct {
 }
 
 func LoadConfiguration(opts *Options) (config *Configuration, err error) {
+	if opts == nil {
+		return nil, fmt.Errorf("Invalid options")
+	}
 	configPath := opts.config
 	if configPath == "" {
 		configPath = defaultPath()
@@ -59,21 +61,16 @@ func LoadConfiguration(opts *Options) (config *Configuration, err error) {
 	}
 
 	// try to parse the old .ngrok format for backwards compatibility
-	matched := false
-	content := strings.TrimSpace(string(configBuf))
-	if matched, err = regexp.MatchString("^[0-9a-zA-Z_\\-!]+$", content); err != nil {
-		return
-	} else if matched {
-		config = &Configuration{AuthToken: content}
-	}
-
-	// set configuration defaults
-	if config.ServerAddr == "" {
-		config.ServerAddr = defaultServerAddr
-	}
+	//matched := false
+	//content := strings.TrimSpace(string(configBuf))
+	//if matched, err = regexp.MatchString("^[0-9a-zA-Z_\\-!]+$", content); err != nil {
+	//	return
+	//} else if matched {
+	//	config = &Configuration{AuthToken: content}
+	//}
 
 	if config.InspectAddr == "" {
-		config.InspectAddr = defaultInspectAddr
+		config.InspectAddr = "127.0.0.1:4040"
 	}
 
 	if config.HttpProxy == "" {
@@ -138,6 +135,9 @@ func LoadConfiguration(opts *Options) (config *Configuration, err error) {
 	if opts.authtoken != "" {
 		config.AuthToken = opts.authtoken
 	}
+	if len(opts.tlsCrtPaths) > 0 {
+		config.TlsCrtPaths = opts.tlsCrtPaths
+	}
 
 	switch opts.command {
 	// start a single tunnel, the default, simple ngrok behavior
@@ -189,9 +189,6 @@ func LoadConfiguration(opts *Options) (config *Configuration, err error) {
 				delete(config.Tunnels, name)
 			}
 		}
-
-	case "start-all":
-		return
 
 	default:
 		err = fmt.Errorf("Unknown command: %s", opts.command)
