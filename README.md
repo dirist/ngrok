@@ -6,8 +6,6 @@
 ngrok is a reverse proxy that creates a secure tunnel from a public endpoint to a locally running web service.
 ngrok captures and analyzes all traffic over the tunnel for later inspection and replay.
 
-## ngrok 2.0
-**NOTE** This repository contains the code for ngrok 1.0. The code for ngrok 2.0 is not yet open source.
 
 ## What can I do with ngrok?
 - Expose any http service behind a NAT or firewall to the internet on a subdomain of ngrok.com
@@ -25,10 +23,20 @@ ngrok captures and analyzes all traffic over the tunnel for later inspection and
 
 
 ## Downloading and installing ngrok
-ngrok has _no_ runtime dependencies. Just download a single binary for your platform and run it. Some premium features
-are only available by creating an account on ngrok.com. If you need them, [create an account on ngrok.com](https://ngrok.com/signup).
 
-#### [Download ngrok for your platform](https://ngrok.com/download)
+    git clone git@github.com:dirist/ngrok.git
+    cd ngrok && make
 
-## Developing on ngrok
-[ngrok developer's guide](docs/DEVELOPMENT.md)
+## Test on localhost
+1. edit hosts and generate tls:    
+
+
+    make test
+2. start test server:
+
+
+    make testsrv
+3. start test client:
+
+
+    make testcli
